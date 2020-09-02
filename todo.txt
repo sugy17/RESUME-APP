@@ -1,0 +1,30 @@
+///php
+Add include_once and other php life-cycle optimizations 
+
+
+/////////////  mysql 
+Add dept
+Add add make degree selects
+
+
+
+
+ ////////form.php
+
+Make next button functional --> imp        done
+Add loading screen while phone verify.     done                  
+Add and change phone number country input.
+Add retrive data on verify if exists.      
+ADd rem functions()          
+Add wrong otp and improve on sucess
+Add dept & degrees select               //imp
+Add dob dob_m                           //imp
+
+
+/////// search.php
+
+add dept
+add make degree selects
+
+
+

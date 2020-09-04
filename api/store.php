@@ -4,9 +4,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// if(!isset($_SESSION["_".$_REQUEST['mobile']])||!$_SESSION["_".$_REQUEST['mobile']] ){
-// 	die("MOBILE NUMBER NOT VERIFIED");
-// }
+if(!isset($_SESSION["_".$_REQUEST['mobile']])||!$_SESSION["_".$_REQUEST['mobile']] ){
+	die("MOBILE NUMBER NOT VERIFIED");
+}
 
 
 $uid=$_REQUEST['uid'];
@@ -33,13 +33,13 @@ function reCaptcha($recaptcha)
 	return json_decode($data, true);
 }
 
-// $recaptcha = $_REQUEST['g-recaptcha-response'];
-// $res = reCaptcha($recaptcha);
-// if (!$res['success']) {
-// 	// Error
-// 	echo "<h1>ReCaptcha Error This site is resistant to bots!!</h1>";
-// 	return;
-// }
+$recaptcha = $_REQUEST['g-recaptcha-response'];
+$res = reCaptcha($recaptcha);
+if (!$res['success']) {
+	// Error
+	echo "<h1>ReCaptcha Error This site is resistant to bots!!</h1>";
+	return;
+}
 
 
 include('../include/config.php');
@@ -154,14 +154,14 @@ if ($size > 5) {
 		$fileType1 = strtolower(pathinfo(basename($_FILES["photo"]["name"]), PATHINFO_EXTENSION));
 		$target_file1 = "uploads/photo/$uid.$fileType1";
 		echo $target_file1."<br><br>";
-		if ($fileType1 == "png" || $fileType1 == "jpeg") {
+		if ($fileType1 == "png" || $fileType1 == "jpeg" ||  $fileType1 == "jpg") {
             $sql= "INSERT INTO application (application_date,application_time,uid, post_id, department) VALUES(curdate(),curtime(),$uid,$post_id,'$department') ON DUPLICATE KEY UPDATE    
             application_date=curdate(),application_time=curtime(),seen=0,department='$department'";
 			echo $sql."<br><br>";
 			if ($result = mysqli_query($link, $sql)) {
 				if (mysqli_error($link)) {
 					//rollback
-                    echo "ERROR: Could not execute $sql. " .mysqli_error($link);
+					echo "ERROR: Could not execute $sql. " .mysqli_error($link);
 				} else {
                     $sql = "Update applicant set title_select='$title_select' ,name='$name',gender_select='$gender_select',dob='$dob',email='$email',mobile='$mobile',marks_10=$marks_10,marks_12=$marks_12,yearofpassing_10=$yearofpassing_10 ,yearofpassing_12=$yearofpassing_12 ,degree_ug='$degree_ug',university_ug='$university_ug',branch_ug='$branch_ug' ,marks_ug=$marks_ug ,yearofpassing_ug=$yearofpassing_ug,degree_pg='$degree_pg' ,university_pg='$university_pg',branch_pg='$branch_pg' ,marks_pg=$marks_pg,yearofpassing_pg=$yearofpassing_pg ,university_phd='$university_phd' ,part_fulltime=$part_fulltime,areaofspecialization='$areaofspecialization',status=$status,status_others='$status_others',yearofcompletion_phd=$yearofcompletion_phd ,yearofreg_phd=$yearofreg_phd ,total_exp_years=" . (floatval($total_exp_years) + floatval($total_exp_months) / 12) . ",teaching_exp_years=" . (floatval($teaching_exp_years) + floatval($teaching_exp_months) / 12) . ",non_teaching_exp_years=" . (floatval($non_teaching_exp_years) + floatval($non_teaching_exp_months) / 12) . ",resume='$target_file2',photo='$target_file1' where uid=$uid";
 					echo $sql."<br><br>";
@@ -176,9 +176,9 @@ if ($size > 5) {
 						// destroy the session
 						session_destroy();
 					} else echo "ERROR: Could not execute $sql. " . mysqli_error($link);
-                } 
+				}
 			} else echo "ERROR: Could not execute $sql. " . mysqli_error($link);			
-		} else "pls uplaod image in png or jpeg format only";
+		} else echo "pls uplaod image in png or jpeg or jpg format only";
 	} else echo "pls uplaod in pdf / doc / docx format";
 } else echo "File is not uploaded.";
 
